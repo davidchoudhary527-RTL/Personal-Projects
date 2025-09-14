@@ -81,7 +81,7 @@ Test completed.
 ---
 
 ### Waveform
-![RAM Waveform](single_port_sync_ram%20/4.sim/single_port_sync_ram.png)
+![RAM Waveform](https://github.com/davidchoudhary527-RTL/Personal-Projects/blob/main/single_port_sync_ram%20/4.sim/single_port_sync_ram.png)
 
 ---
 
