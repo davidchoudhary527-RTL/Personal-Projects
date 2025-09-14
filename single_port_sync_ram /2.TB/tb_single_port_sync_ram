@@ -1,0 +1,108 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 14.09.2025 16:56:52
+// Design Name: 
+// Module Name: tb_single_port_sync_ram
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module tb_single_port_sync_ram();
+
+  // Parameters
+  parameter ADDR_WIDTH = 4;
+  parameter DATA_WIDTH = 32;
+  parameter DEPTH = 16;
+
+  // DUT ports
+  reg                   clk;
+  reg  [ADDR_WIDTH-1:0] addr;
+  wire [DATA_WIDTH-1:0] data;
+  reg                   cs;
+  reg                   we;
+  reg                   oe;
+
+  reg [DATA_WIDTH-1:0] data_in;
+  assign data = (cs & we) ? data_in : 'hz; 
+
+  // Instantiate DUT
+  single_port_sync_ram #(
+    .ADDR_WIDTH(ADDR_WIDTH),
+    .DATA_WIDTH(DATA_WIDTH),
+    .DEPTH(DEPTH)
+  ) uut (
+    .clk(clk),
+    .addr(addr),
+    .data(data),
+    .cs(cs),
+    .we(we),
+    .oe(oe)
+  );
+
+  // Clock generation
+  always #5 clk = ~clk;  // 100MHz clock (10ns period)
+
+  // Test sequence
+  initial begin
+    // Init
+    clk   = 0;
+    addr  = 0;
+    data_in = 0;
+    cs    = 0;
+    we    = 0;
+    oe    = 0;
+
+    // Wait for reset phase
+    #10;
+
+    // --------------------
+    // Write operations
+    // --------------------
+    $display("Starting write operations...");
+    cs = 1; we = 1; oe = 0;
+
+    addr = 4'h0; data_in = 32'hAAAA_BBBB; #10;
+    addr = 4'h1; data_in = 32'h1234_5678; #10;
+    addr = 4'h2; data_in = 32'hA5A5_A5A5; #10;
+    addr = 4'h3; data_in = 32'hFACE_CAFE; #10;
+
+    we = 0; data_in = 'hz; // Stop driving bus
+
+    // --------------------
+    // Read operations
+    // --------------------
+    $display("Starting read operations...");
+    oe = 1;
+
+    addr = 4'h0; #10;
+    $display("Read @0 = %h", data);
+
+    addr = 4'h1; #10;
+    $display("Read @1 = %h", data);
+
+    addr = 4'h2; #10;
+    $display("Read @2 = %h", data);
+
+    addr = 4'h3; #10;
+    $display("Read @3 = %h", data);
+
+    // Finish
+    #20;
+    $display("Test completed.");
+    $stop;
+  end
+
+endmodule
