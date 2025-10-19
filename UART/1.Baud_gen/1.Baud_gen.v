@@ -53,7 +53,7 @@ end
 //  Timer logic
 always @( posedge clk or negedge reset_n)
 begin
-    if(reset_n)
+    if(!reset_n)
     begin
         clock_ticks <= 14'd0; 
         baud_clk    <= 1'b0; 
