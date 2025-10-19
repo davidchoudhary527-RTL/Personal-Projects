@@ -6,7 +6,7 @@
 // Create Date: 15.09.2025 23:52:25
 // Design Name: 
 // Module Name: tb_baud_gen
-// Project Name: UART
+// Project Name: 
 // Target Devices: 
 // Tool Versions: 
 // Description: 
@@ -26,13 +26,15 @@ module tb_baud_gen;
     reg reset_n;
     reg [1:0] baud_rate;
     wire baud_clk;
+    wire [13:0] BAUD_DIV;
 
     // DUT instantiation
     baud_gen uut (
         .clk(clk),
         .reset_n(reset_n),
         .baud_rate(baud_rate),
-        .baud_clk(baud_clk)
+        .baud_clk(baud_clk),
+        .BAUD_DIV(BAUD_DIV)
     );
 
     // Clock generation: 50 MHz → period = 20 ns
