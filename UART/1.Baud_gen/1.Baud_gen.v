@@ -22,7 +22,8 @@ module baud_gen(
     input  wire clk,
     input  wire reset_n,
     input wire  [1:0]  baud_rate,
-    output reg  baud_clk
+    output reg  baud_clk,
+    output [13:0] BAUD_DIV
     );
      
 //  Internal declarations
@@ -74,4 +75,5 @@ begin
     end 
 end
 
+assign BAUD_DIV = final_value ;
 endmodule
