@@ -45,12 +45,12 @@ module tb_baud_gen;
 
         // Init signals
         clk = 0;
-        reset_n = 1;
+        reset_n = 0;
         baud_rate = 2'b00;
 
         // Reset pulse
         #50;
-        reset_n = 0;
+        reset_n = 1;
 
         // Test different baud rates
         #1000000 baud_rate = 2'b00;   // 2400
