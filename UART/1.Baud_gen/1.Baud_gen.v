@@ -13,15 +13,15 @@
 // 
 // Dependencies: 
 // 
-// Revision:
+// Revision: 
 // Revision 0.01 - File Created
 // Additional Comments:
-// 
+// Can Only be used with clk of 50Mhz 
 //////////////////////////////////////////////////////////////////////////////////
 module baud_gen(
     input  wire clk,
     input  wire reset_n,
-    input wire  [1:0]  baud_rate,
+    input wire  [2:0]  baud_rate,
     output reg  baud_clk,
     output [13:0] BAUD_DIV
     );
@@ -34,7 +34,10 @@ reg [13 : 0] final_value;
 localparam BAUD24  = 2'b00,
            BAUD48  = 2'b01,
            BAUD96  = 2'b10,
-           BAUD192 = 2'b11;
+           BAUD192 = 2'b11,
+           BAUD384 = 3'b100,
+           BAUD560 = 3'b101,
+           BAUD1280 = 3'b110;
 
 //  BaudRate 4-1 Mux
 always @(baud_rate)
@@ -42,10 +45,13 @@ begin
     case (baud_rate)
         //  All these ratio ticks are calculated for 50MHz Clock,
         //  The values shall change with the change of the clock frequency.
-        BAUD24 : final_value = 14'd10417;  //  ratio ticks for the 2400 BaudRate.
-        BAUD48 : final_value = 14'd5208;   //  ratio ticks for the 4800 BaudRate.
-        BAUD96 : final_value = 14'd2604;   //  ratio ticks for the 9600 BaudRate.
-        BAUD192 : final_value = 14'd1302;  //  ratio ticks for the 19200 BaudRate.
+        BAUD24 : final_value = 14'd3906;  //  ratio ticks for the 2400 BaudRate.
+        BAUD48 : final_value = 14'd1953;   //  ratio ticks for the 4800 BaudRate.
+        BAUD96 : final_value = 14'd977;   //  ratio ticks for the 9600 BaudRate.
+        BAUD192 : final_value = 14'd488;  //  ratio ticks for the 19200 BaudRate.
+        BAUD384 : final_value = 14'd244;  //  ratio ticks for the 19200 BaudRate.
+        BAUD560 : final_value = 14'd488;  //  ratio ticks for the 19200 BaudRate.
+        BAUD1280 : final_value = 14'd73;  //  ratio ticks for the 19200 BaudRate
         default: final_value = 14'd0;      //  The systems original Clock.
     endcase
 end
@@ -69,7 +75,7 @@ begin
         end 
         else
         begin
-            clock_ticks <= clock_ticks + 1'd1;
+            clock_ticks <= clock_ticks + 14'd1;
             baud_clk    <= baud_clk;
         end
     end 
