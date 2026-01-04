@@ -61,7 +61,7 @@ Waveform snapshot:
 - DSP processing pipelines
 - DMA buffering
 
-## 🚀 Future Integrations
+## Future Integrations
 
 This FIFO is designed as a reusable building block and can be easily extended or integrated into larger digital systems.
 
